@@ -1,0 +1,48 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<Html>
+<head>
+    <title>Check External Functions</title>
+	<script type="text/JavaScript" language="JavaScript">
+			
+</script>
+
+
+
+    <script type="text/JavaScript" language="JavaScript">
+		       
+		function GetCustomerID() {
+            alert(chrome.webview.hostObjects.sync.ChromeBrowser['GetCustomerID']);     
+           
+        }	
+		
+        function SetCustomerID() {
+
+			var CustomerID = parseInt(document.getElementById("txtCustomerID").value);
+            var argumentsList = [];
+            argumentsList.push(CustomerID);
+			
+            chrome.webview.hostObjects.sync.ChromeBrowser["SetCustomerID"].apply(null, argumentsList);
+		}
+
+		
+	   const p = new Proxy(function() {}, {
+							apply: function(target, thisArg, argumentsList) {
+							console.log('called: ' + argumentsList.join(', '));							
+               return chrome.webview.hostObjects.sync.SecureBrowser.InvokeMethod("GetCustomerDetails",argumentsList);
+  }
+});
+
+    </script>
+</head>
+<body style="font-family:verdana;font-size:11px">
+	<form name="CheckExternal">
+		<input type="button" value="Get Customer ID" onclick='GetCustomerID();'>
+		<br /><br />
+
+		<input type="button" onclick='SetCustomerID();' value="SetCustomerID" />
+		<br /><br />
+		<input id="txtCustomerID" class="textField" type="text">
+
+	</form>
+</body>
+</Html>
